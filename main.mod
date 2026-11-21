@@ -17,4 +17,13 @@ var
  rk      // marginal product of inherited capital
  tax;    // household lump-sum taxes
 
- 
+ varexo eps_a;   // innovaion to log TFP
+parameters
+ beta     // household discount factor
+ alpha    // capital share in production
+ delta    // capital depreiation rate
+ eta      // curvature of labour disutility
+ chi      // scale of labour disutility
+ rho_a    // persistence of log TFP
+ rho_g    // persistence of log purchases
+ gbar;    // steady government purchases
