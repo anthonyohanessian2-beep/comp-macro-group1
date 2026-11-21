@@ -27,3 +27,12 @@ parameters
  rho_a    // persistence of log TFP
  rho_g    // persistence of log purchases
  gbar;    // steady government purchases
+
+beta=.97; alpha=.336; delta=.08; eta=1;
+rho_a=@{RHO_A}; rho_g=.9;
+// Calibration targets: n=1/3, g=20% of steady output.
+kap=(alpha/(1/beta-1+delta))^(1/(1-alpha)); // steady K/N ratio
+yref=kap^alpha/3;
+gbar=.2*yref;
+cref=yref-delta*kap/3-gbar;
+chi=(1-alpha)*kap^alpha/(cref*(1/3)^eta);
