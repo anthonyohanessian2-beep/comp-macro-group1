@@ -1,7 +1,28 @@
 // Question 1: persistence of a TFP shock in an RBC economy.
-// Household is the owner of capital, and the firm is renting inputs, and there arelump-sum taxes.
-// From Octave/MATLAB: dynare main 
-//                    
+// Household is the owner of capital, and the firm is renting inputs, and there are lump-sum taxes.
+// From Octave/MATLAB: dynare main
+
+// METHOD=1: stochastic perturbation; 2: perfect foresight; 3: extended path.
+// ORDER is the Taylor degree for METHOD=1 and uncertainty horizon for METHOD=3
+// SHOCK=1: TFP; 2: government spending; 3: tax timing.
+@#ifndef METHOD
+ @#define METHOD = 1
+@#endif
+@#ifndef ORDER
+ @#define ORDER = 1
+@#endif
+@#ifndef SHOCK
+ @#define SHOCK = 1
+@#endif
+@#ifndef HORIZON
+ @#define HORIZON = 200
+@#endif
+@#ifndef SAMPLE
+ @#define SAMPLE = 80
+@#endif
+@#ifndef SCALE
+ @#define SCALE = 1
+@#endif
 
 
 // k is chosen at the END of the period; its lag is inherited.
@@ -28,7 +49,7 @@ parameters
  rho_g    // persistence of log purchases
  gbar;    // steady government purchases
 
-beta=.97; alpha=.336; delta=.08; eta=1;
+beta=.96; alpha=.36; delta=.08; eta=1;
 rho_a=@{RHO_A}; rho_g=.9;
 // Calibration targets: n=1/3, g=20% of steady output.
 kap=(alpha/(1/beta-1+delta))^(1/(1-alpha)); // steady K/N ratio
