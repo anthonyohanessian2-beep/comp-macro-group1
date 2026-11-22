@@ -2,7 +2,6 @@
 // Household is the owner of capital, and the firm is renting inputs, and there are lump-sum taxes.
 // From Octave/MATLAB: dynare main
 //                     dynare main -DRHO_A=0.5
-// METHOD=1: stochastic perturbation; 2: perfect foresight; 3: extended path.
 // ORDER is the Taylor degree for the stochastic solution.
 @#ifndef RHO_A
  @#define RHO_A = 0.9
@@ -70,3 +69,31 @@ model;
  // 10. Persistent log government purchases (no shock in this experiment).
  log(g/gbar)=rho_g*log(g(-1)/gbar);
 end;
+
+// Calibration makes n=1/3 an exact deterministic steady state.
+steady_state_model;
+ n=1/3;
+ k=(alpha/(1/beta-1+delta))^(1/(1-alpha))*n;
+ a=1; g=gbar;
+ y=a*k^alpha*n^(1-alpha);
+ invest=delta*k;
+ c=y-invest-g;
+ w=(1-alpha)*y/n;
+ rk=alpha*y/k;
+ tax=g;
+end;
+steady;
+resid;
+check;
+model_diagnostics;
+// stderr gives the standard deviation of an unanticipated innovation.
+shocks;
+ var eps_a; stderr 0.01;
+end;
+set_dynare_seed(20261005);
+stoch_simul(order=@{ORDER},irf=40,periods=@{SAMPLE},drop=0,nograph,noprint) y c invest k n w;
+
+// Save results; the file name includes rho_a so the runs do not overwrite each other.
+lab_file=sprintf('rbc_rho%g_o%d.mat',@{RHO_A},@{ORDER});
+save(lab_file,'M_','oo_','options_','-v7');
+fprintf('Saved %s\n',lab_file);
